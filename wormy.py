@@ -46,6 +46,39 @@ class Wormy:
             self.runGame()
             self.showGameOverScreen()
 
+
+
+    def showStartScreen(self):
+        titleFont = pygame.font.Font('freesansbold.ttf', 100)
+        titleSurf1 = titleFont.render('Wormy!', True, self.WHITE, self.DARKGREEN)
+        titleSurf2 = titleFont.render('Wormy!', True, self.GREEN)
+
+        degrees1 = 0
+        degrees2 = 0
+
+        pygame.event.get()  #clear out event queue
+
+        while True:
+            DISPLAYSURF.fill(self.BGCOLOR)
+            rotatedSurf1 = pygame.transform.rotate(titleSurf1, degrees1)
+            rotatedRect1 = rotatedSurf1.get_rect()
+            rotatedRect1.center = (self.WINDOWWIDTH / 2, self.WINDOWHEIGHT / 2)
+            DISPLAYSURF.blit(rotatedSurf1, rotatedRect1)
+
+            rotatedSurf2 = pygame.transform.rotate(titleSurf2, degrees2)
+            rotatedRect2 = rotatedSurf2.get_rect()
+            rotatedRect2.center = (self.WINDOWWIDTH / 2, self.WINDOWHEIGHT / 2)
+            DISPLAYSURF.blit(rotatedSurf2, rotatedRect2)
+
+            self.drawPressKeyMsg()
+            if self.checkForKeyPress():
+                return
+            pygame.display.update()
+            FPSCLOCK.tick(self.FPS)
+            degrees1 += 3 # rotate by 3 degrees each frame
+            degrees2 += 7 # rotate by 7 degrees each frame
+
+
     def runGame(self):
         # Set a random start point.
         startx = random.randint(5, self.CELLWIDTH - 6)
@@ -106,91 +139,6 @@ class Wormy:
             pygame.display.update()
             FPSCLOCK.tick(self.FPS)
 
-    def drawPressKeyMsg(self):
-        pressKeySurf = BASICFONT.render('Press a key to play.', True, self.DARKGRAY)
-        pressKeyRect = pressKeySurf.get_rect()
-        pressKeyRect.topleft = (self.WINDOWWIDTH - 200, self.WINDOWHEIGHT - 30)
-        DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
-
-
-
-    # KRT 14/06/2012 rewrite event detection to deal with mouse use
-    def checkForKeyPress(self):
-        for event in pygame.event.get():
-            if event.type == QUIT:      #event is quit
-                self.terminate()
-            elif event.type == KEYDOWN:
-                if event.key == K_ESCAPE:   #event is escape key
-                    self.terminate()
-                else:
-                    return event.key   #key found return with it
-        # no quit or key events in queue so return None
-        return None
-
-
-    def showStartScreen(self):
-        titleFont = pygame.font.Font('freesansbold.ttf', 100)
-        titleSurf1 = titleFont.render('Wormy!', True, self.WHITE, self.DARKGREEN)
-        titleSurf2 = titleFont.render('Wormy!', True, self.GREEN)
-
-        degrees1 = 0
-        degrees2 = 0
-
-    #KRT 14/06/2012 rewrite event detection to deal with mouse use
-        pygame.event.get()  #clear out event queue
-
-        while True:
-            DISPLAYSURF.fill(self.BGCOLOR)
-            rotatedSurf1 = pygame.transform.rotate(titleSurf1, degrees1)
-            rotatedRect1 = rotatedSurf1.get_rect()
-            rotatedRect1.center = (self.WINDOWWIDTH / 2, self.WINDOWHEIGHT / 2)
-            DISPLAYSURF.blit(rotatedSurf1, rotatedRect1)
-
-            rotatedSurf2 = pygame.transform.rotate(titleSurf2, degrees2)
-            rotatedRect2 = rotatedSurf2.get_rect()
-            rotatedRect2.center = (self.WINDOWWIDTH / 2, self.WINDOWHEIGHT / 2)
-            DISPLAYSURF.blit(rotatedSurf2, rotatedRect2)
-
-            self.drawPressKeyMsg()
-    #KRT 14/06/2012 rewrite event detection to deal with mouse use
-            if self.checkForKeyPress():
-                return
-            pygame.display.update()
-            FPSCLOCK.tick(self.FPS)
-            degrees1 += 3 # rotate by 3 degrees each frame
-            degrees2 += 7 # rotate by 7 degrees each frame
-
-
-    def terminate(self):
-        pygame.quit()
-        sys.exit()
-
-
-    def getRandomLocation(self):
-        return {'x': random.randint(0, self.CELLWIDTH - 1), 'y': random.randint(0, self.CELLHEIGHT - 1)}
-
-
-    def showGameOverScreen(self):
-        gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
-        gameSurf = gameOverFont.render('Game', True, self.WHITE)
-        overSurf = gameOverFont.render('Over', True, self.WHITE)
-        gameRect = gameSurf.get_rect()
-        overRect = overSurf.get_rect()
-        gameRect.midtop = (self.WINDOWWIDTH / 2, 10)
-        overRect.midtop = (self.WINDOWWIDTH / 2, gameRect.height + 10 + 25)
-
-        DISPLAYSURF.blit(gameSurf, gameRect)
-        DISPLAYSURF.blit(overSurf, overRect)
-        self.drawPressKeyMsg()
-        pygame.display.update()
-        pygame.time.wait(500)
-    #KRT 14/06/2012 rewrite event detection to deal with mouse use
-        pygame.event.get()  #clear out event queue
-        while True:
-            if self.checkForKeyPress():
-                return
-    #KRT 12/06/2012 reduce processor loading in gameover screen.
-            pygame.time.wait(100)
 
     def drawScore(self, score):
         scoreSurf = BASICFONT.render('Score: %s' % (score), True, self.WHITE)
@@ -221,6 +169,57 @@ class Wormy:
             pygame.draw.line(DISPLAYSURF, self.DARKGRAY, (x, 0), (x, self.WINDOWHEIGHT))
         for y in range(0, self.WINDOWHEIGHT, self.CELLSIZE): # draw horizontal lines
             pygame.draw.line(DISPLAYSURF, self.DARKGRAY, (0, y), (self.WINDOWWIDTH, y))
+
+
+    def drawPressKeyMsg(self):
+        pressKeySurf = BASICFONT.render('Press a key to play.', True, self.DARKGRAY)
+        pressKeyRect = pressKeySurf.get_rect()
+        pressKeyRect.topleft = (self.WINDOWWIDTH - 200, self.WINDOWHEIGHT - 30)
+        DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+
+    def checkForKeyPress(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:      #event is quit
+                self.terminate()
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE:   #event is escape key
+                    self.terminate()
+                else:
+                    return event.key   #key found return with it
+        # no quit or key events in queue so return None
+        return None
+
+
+    def getRandomLocation(self):
+        return {'x': random.randint(0, self.CELLWIDTH - 1), 'y': random.randint(0, self.CELLHEIGHT - 1)}
+
+
+    def showGameOverScreen(self):
+        gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
+        gameSurf = gameOverFont.render('Game', True, self.WHITE)
+        overSurf = gameOverFont.render('Over', True, self.WHITE)
+        gameRect = gameSurf.get_rect()
+        overRect = overSurf.get_rect()
+        gameRect.midtop = (self.WINDOWWIDTH / 2, 10)
+        overRect.midtop = (self.WINDOWWIDTH / 2, gameRect.height + 10 + 25)
+
+        DISPLAYSURF.blit(gameSurf, gameRect)
+        DISPLAYSURF.blit(overSurf, overRect)
+        self.drawPressKeyMsg()
+        pygame.display.update()
+        pygame.time.wait(500)
+        pygame.event.get()  #clear out event queue
+        while True:
+            if self.checkForKeyPress():
+                return
+            pygame.time.wait(100)
+
+
+    def terminate(self):
+        pygame.quit()
+        sys.exit()
+
 
 
 if __name__ == '__main__':
