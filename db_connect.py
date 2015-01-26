@@ -16,12 +16,14 @@ TABLES['game_stats'] = (
     ") ENGINE=InnoDB"
 )
 
-print("Connecting to database " + DB_NAME + "...")
-usr = raw_input("Username: ")
-cnx = mysql.connector.connect(user=usr)
-cursor = cnx.cursor()
-
-#cnx = mysql.connector.connect(user=usr, password="jfkd", host='localhost', database='pygamescores')
+# Receive database username.
+# Creates instance of a connection
+def init():
+    print("Connecting to database " + DB_NAME + "...")
+    usr = raw_input("Username: ")
+    cnx = mysql.connector.connect(user=usr)
+    cursor = cnx.cursor()
+    #cnx = mysql.connector.connect(user=usr, password="jfkd", host='localhost', database='pygamescores')
 
 # If the database specified in DB_NAME does not exist,
 # attempt to create a new instance of the database.
@@ -38,6 +40,10 @@ def create_database(cursor):
 # DB_NAME. If the database does not exist, create it.
 # Calls: create_database()
 def connect_to_database():
+    """
+
+    :rtype :
+    """
     try:
         cnx.database = DB_NAME
     except mysql.connector.Error as err:
