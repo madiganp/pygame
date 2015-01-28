@@ -4,13 +4,12 @@ import db_connect
 
 def main():
     # Connect to the database to save the high scores
-    #db_connect.init()
-    #db_connect.connect_to_database()
+    db = db_connect.DB_Connect('pygamescores')
     pygame.init()
-    worm = Wormy()
+    snake = Snake()
 
 
-class Wormy:
+class Snake:
     FPS = 15
     WINDOWWIDTH = 640
     WINDOWHEIGHT = 480
@@ -19,6 +18,7 @@ class Wormy:
     assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
     CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
     CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
+    wormCoords = []
 
     #             R    G    B
     WHITE     = (255, 255, 255)
@@ -40,18 +40,19 @@ class Wormy:
         FPSCLOCK = pygame.time.Clock()
         DISPLAYSURF = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHEIGHT))
         BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
-        pygame.display.set_caption('Wormy')
+        pygame.display.set_caption('Snake')
         self.showStartScreen()
         while True:
             self.runGame()
+            self.saveScore(len(self.wormCoords) - 3)
             self.showGameOverScreen()
-
+            self.showHighScores()
 
 
     def showStartScreen(self):
         titleFont = pygame.font.Font('freesansbold.ttf', 100)
-        titleSurf1 = titleFont.render('Wormy!', True, self.WHITE, self.DARKGREEN)
-        titleSurf2 = titleFont.render('Wormy!', True, self.GREEN)
+        titleSurf1 = titleFont.render('Snake!', True, self.WHITE, self.DARKGREEN)
+        titleSurf2 = titleFont.render('Snake!', True, self.GREEN)
 
         degrees1 = 0
         degrees2 = 0
@@ -83,7 +84,7 @@ class Wormy:
         # Set a random start point.
         startx = random.randint(5, self.CELLWIDTH - 6)
         starty = random.randint(5, self.CELLHEIGHT - 6)
-        wormCoords = [{'x': startx,     'y': starty},
+        self.wormCoords = [{'x': startx,     'y': starty},
                       {'x': startx - 1, 'y': starty},
                       {'x': startx - 2, 'y': starty}]
         direction = self.RIGHT
@@ -108,34 +109,34 @@ class Wormy:
                         self.terminate()
 
             # check if the worm has hit itself or the edge
-            if wormCoords[self.HEAD]['x'] == -1 or wormCoords[self.HEAD]['x'] == self.CELLWIDTH or wormCoords[self.HEAD]['y'] == -1 or wormCoords[self.HEAD]['y'] == self.CELLHEIGHT:
+            if self.wormCoords[self.HEAD]['x'] == -1 or self.wormCoords[self.HEAD]['x'] == self.CELLWIDTH or self.wormCoords[self.HEAD]['y'] == -1 or self.wormCoords[self.HEAD]['y'] == self.CELLHEIGHT:
                 return # game over
-            for wormBody in wormCoords[1:]:
-                if wormBody['x'] == wormCoords[self.HEAD]['x'] and wormBody['y'] == wormCoords[self.HEAD]['y']:
+            for wormBody in self.wormCoords[1:]:
+                if wormBody['x'] == self.wormCoords[self.HEAD]['x'] and wormBody['y'] == self.wormCoords[self.HEAD]['y']:
                     return # game over
 
             # check if worm has eaten an apply
-            if wormCoords[self.HEAD]['x'] == apple['x'] and wormCoords[self.HEAD]['y'] == apple['y']:
+            if self.wormCoords[self.HEAD]['x'] == apple['x'] and self.wormCoords[self.HEAD]['y'] == apple['y']:
                 # don't remove worm's tail segment
                 apple = self.getRandomLocation() # set a new apple somewhere
             else:
-                del wormCoords[-1] # remove worm's tail segment
+                del self.wormCoords[-1] # remove worm's tail segment
 
             # move the worm by adding a segment in the direction it is moving
             if direction == self.UP:
-                newHead = {'x': wormCoords[self.HEAD]['x'], 'y': wormCoords[self.HEAD]['y'] - 1}
+                newHead = {'x': self.wormCoords[self.HEAD]['x'], 'y': self.wormCoords[self.HEAD]['y'] - 1}
             elif direction == self.DOWN:
-                newHead = {'x': wormCoords[self.HEAD]['x'], 'y': wormCoords[self.HEAD]['y'] + 1}
+                newHead = {'x': self.wormCoords[self.HEAD]['x'], 'y': self.wormCoords[self.HEAD]['y'] + 1}
             elif direction == self.LEFT:
-                newHead = {'x': wormCoords[self.HEAD]['x'] - 1, 'y': wormCoords[self.HEAD]['y']}
+                newHead = {'x': self.wormCoords[self.HEAD]['x'] - 1, 'y': self.wormCoords[self.HEAD]['y']}
             elif direction == self.RIGHT:
-                newHead = {'x': wormCoords[self.HEAD]['x'] + 1, 'y': wormCoords[self.HEAD]['y']}
-            wormCoords.insert(0, newHead)
+                newHead = {'x': self.wormCoords[self.HEAD]['x'] + 1, 'y': self.wormCoords[self.HEAD]['y']}
+            self.wormCoords.insert(0, newHead)
             DISPLAYSURF.fill(self.BGCOLOR)
             self.drawGrid()
-            self.drawWorm(wormCoords)
+            self.drawWorm(self.wormCoords)
             self.drawApple(apple)
-            self.drawScore(len(wormCoords) - 3)
+            self.drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
             FPSCLOCK.tick(self.FPS)
 
@@ -195,6 +196,14 @@ class Wormy:
         return {'x': random.randint(0, self.CELLWIDTH - 1), 'y': random.randint(0, self.CELLHEIGHT - 1)}
 
 
+    # Save the score in the database
+    def saveScore(self, score):
+        print 'Score: ', score
+        db_connect.connect_to_database()
+
+
+
+
     def showGameOverScreen(self):
         gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
         gameSurf = gameOverFont.render('Game', True, self.WHITE)
@@ -215,6 +224,23 @@ class Wormy:
                 return
             pygame.time.wait(100)
 
+
+    def showHighScores(self):
+        DISPLAYSURF.fill(self.BGCOLOR)
+        highScoresFont = pygame.font.Font('freesansbold.ttf', 100)
+        titleSurf = highScoresFont.render('High Scores', True, self.WHITE)
+        titleRect = titleSurf.get_rect()
+        titleRect.midtop = (self.WINDOWWIDTH / 2, 10)
+        DISPLAYSURF.blit(titleSurf, titleRect)
+        self.drawPressKeyMsg()
+        pygame.display.update()
+        pygame.time.wait(500)
+        pygame.event.get()
+        while True:
+            if self.checkForKeyPress():
+                DISPLAYSURF.fill(self.BGCOLOR)
+                return
+            pygame.time.wait(100)
 
     def terminate(self):
         pygame.quit()

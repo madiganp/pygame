@@ -1,10 +1,10 @@
 from unittest import TestCase
-from wormy import Wormy
+from Snake import Snake
 
 __author__ = 'madiganp'
 
 
-class TestWormy(TestCase):
+class TestSnake(TestCase):
     def test_runGame(self):
         self.fail()
 
