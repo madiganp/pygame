@@ -1,12 +1,12 @@
 import random, pygame, sys
 from pygame.locals import *
-import db_connect
+from db_connect import DBConnect
 
 def main():
-    # Connect to the database to save the high scores
-    db = db_connect.DB_Connect('pygamescores')
     pygame.init()
-    snake = Snake()
+    db = DBConnect('pygamescores') # Connect to the database to save the high scores
+    snake = Snake(db)
+    db.close_database()
 
 
 class Snake:
@@ -35,16 +35,18 @@ class Snake:
     RIGHT = 'right'
     HEAD = 0 # Index of the worm's head
 
-    def __init__(self):
+    def __init__(self, db):
         global FPSCLOCK, DISPLAYSURF, BASICFONT
         FPSCLOCK = pygame.time.Clock()
         DISPLAYSURF = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHEIGHT))
         BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
         pygame.display.set_caption('Snake')
+
+
         self.showStartScreen()
         while True:
             self.runGame()
-            self.saveScore(len(self.wormCoords) - 3)
+            self.saveScore(db, len(self.wormCoords) - 3)
             self.showGameOverScreen()
             self.showHighScores()
 
@@ -197,11 +199,11 @@ class Snake:
 
 
     # Save the score in the database
-    def saveScore(self, score):
-        print 'Score: ', score
-        db_connect.connect_to_database()
-
-
+    def saveScore(self, db, score):
+        #if self.db is not None:
+        db.save_score("Peter", score)
+        #else:
+        #    print "Error saving score."
 
 
     def showGameOverScreen(self):
@@ -245,7 +247,6 @@ class Snake:
     def terminate(self):
         pygame.quit()
         sys.exit()
-
 
 
 if __name__ == '__main__':
