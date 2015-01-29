@@ -53,7 +53,6 @@ class DBConnect:
 
     # Function to create a table to hold the high scores.
     def create_table(self):
-        print "creating table"
         try:
             self.cursor.execute(self.TABLE)
             self.cnx.commit()   # Make sure data is committed to the database
@@ -73,7 +72,7 @@ class DBConnect:
         rows = self.cursor.fetchall()
 
         # If there are less than 10 accounts saved, automatically add it; otherwise must be greater than the 10th score.
-        if self.cursor.rowcount <= 9 or new_score > rows[9][1]:
+        if (self.cursor.rowcount <= 9) or (new_score > rows[9][1]):
             #save score
             new_high = ("INSERT INTO highscores (user, score) VALUES (%s, %s)")
             data = (username, new_score)
@@ -82,6 +81,8 @@ class DBConnect:
 
             self.cursor.execute(query)
             rows = self.cursor.fetchall()
+            for row in rows:
+                print(row)
 
         return rows
 

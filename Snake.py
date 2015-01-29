@@ -42,13 +42,13 @@ class Snake:
         BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
         pygame.display.set_caption('Snake')
 
-
         self.showStartScreen()
         while True:
             self.runGame()
-            self.saveScore(db, len(self.wormCoords) - 3)
             self.showGameOverScreen()
-            self.showHighScores()
+            topScores = self.saveScore(db, len(self.wormCoords) - 3)
+            if topScores is not None:
+                self.drawHighScores(topScores)
 
 
     def showStartScreen(self):
@@ -175,10 +175,40 @@ class Snake:
 
 
     def drawPressKeyMsg(self):
-        pressKeySurf = BASICFONT.render('Press a key to play.', True, self.DARKGRAY)
+        pressKeySurf = BASICFONT.render('Press a key to continue.', True, self.DARKGRAY)
         pressKeyRect = pressKeySurf.get_rect()
-        pressKeyRect.topleft = (self.WINDOWWIDTH - 200, self.WINDOWHEIGHT - 30)
+        pressKeyRect.topleft = (self.WINDOWWIDTH - 225, self.WINDOWHEIGHT - 30)
         DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+
+    def drawHighScores(self, topScores):
+        DISPLAYSURF.fill(self.BGCOLOR)
+        hsTitleFont =   pygame.font.Font('freesansbold.ttf', 50)
+        hsFont      =   pygame.font.Font('freesansbold.ttf', 25)
+
+        titleSurf = hsTitleFont.render('High Scores', True, self.WHITE)
+        titleRect = titleSurf.get_rect()
+        titleRect.midtop = (self.WINDOWWIDTH / 2, 50)
+        DISPLAYSURF.blit(titleSurf, titleRect)
+
+        scoresSurf = None
+        i = 20
+        for score in topScores:
+            scoresSurf = hsFont.render(score[0] + ": " + str(score[1]), True, self.RED)
+            scoresRect = scoresSurf.get_rect()
+            scoresRect.center = (self.WINDOWWIDTH / 2, titleRect.bottom + i)
+            DISPLAYSURF.blit(scoresSurf, scoresRect)
+            i += 30
+
+        self.drawPressKeyMsg()
+        pygame.display.update()
+        pygame.time.wait(500)
+        pygame.event.get()
+        while True:
+            if self.checkForKeyPress():
+                DISPLAYSURF.fill(self.BGCOLOR)
+                return
+            pygame.time.wait(100)
 
 
     def checkForKeyPress(self):
@@ -200,11 +230,12 @@ class Snake:
 
     # Save the score in the database
     def saveScore(self, db, score):
-        #if self.db is not None:
-        db.save_score("Peter", score)
-        #else:
-        #    print "Error saving score."
-
+        topScores = None
+        if db is not None:
+            topScores = db.save_score("Peter", score)
+        else:
+            print "Error saving score (database is null)."
+        return topScores
 
     def showGameOverScreen(self):
         gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
@@ -226,23 +257,6 @@ class Snake:
                 return
             pygame.time.wait(100)
 
-
-    def showHighScores(self):
-        DISPLAYSURF.fill(self.BGCOLOR)
-        highScoresFont = pygame.font.Font('freesansbold.ttf', 100)
-        titleSurf = highScoresFont.render('High Scores', True, self.WHITE)
-        titleRect = titleSurf.get_rect()
-        titleRect.midtop = (self.WINDOWWIDTH / 2, 10)
-        DISPLAYSURF.blit(titleSurf, titleRect)
-        self.drawPressKeyMsg()
-        pygame.display.update()
-        pygame.time.wait(500)
-        pygame.event.get()
-        while True:
-            if self.checkForKeyPress():
-                DISPLAYSURF.fill(self.BGCOLOR)
-                return
-            pygame.time.wait(100)
 
     def terminate(self):
         pygame.quit()
