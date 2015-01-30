@@ -10,9 +10,9 @@ def main():
 
 
 class Snake:
-    FPS = 15
-    WINDOWWIDTH = 640
-    WINDOWHEIGHT = 480
+    FPS = 20
+    WINDOWWIDTH = 740
+    WINDOWHEIGHT = 580
     CELLSIZE = 20
     assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
     assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
@@ -45,7 +45,7 @@ class Snake:
         self.showStartScreen()
         while True:
             self.runGame()
-            self.showGameOverScreen()
+            self.showGameOverScreen(len(self.wormCoords) - 3)
             topScores = self.saveScore(db, len(self.wormCoords) - 3)
             if topScores is not None:
                 self.drawHighScores(topScores)
@@ -117,7 +117,7 @@ class Snake:
                 if wormBody['x'] == self.wormCoords[self.HEAD]['x'] and wormBody['y'] == self.wormCoords[self.HEAD]['y']:
                     return # game over
 
-            # check if worm has eaten an apply
+            # check if worm has eaten an apple
             if self.wormCoords[self.HEAD]['x'] == apple['x'] and self.wormCoords[self.HEAD]['y'] == apple['y']:
                 # don't remove worm's tail segment
                 apple = self.getRandomLocation() # set a new apple somewhere
@@ -237,17 +237,26 @@ class Snake:
             print "Error saving score (database is null)."
         return topScores
 
-    def showGameOverScreen(self):
+    def showGameOverScreen(self, score):
         gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
+        scoreFont = pygame.font.Font('freesansbold.ttf', 75)
+
         gameSurf = gameOverFont.render('Game', True, self.WHITE)
         overSurf = gameOverFont.render('Over', True, self.WHITE)
+        scoreSurf = scoreFont.render('Score: ' + str(score), True, self.RED)
+
         gameRect = gameSurf.get_rect()
         overRect = overSurf.get_rect()
+        scoreRect = scoreSurf.get_rect()
+
         gameRect.midtop = (self.WINDOWWIDTH / 2, 10)
         overRect.midtop = (self.WINDOWWIDTH / 2, gameRect.height + 10 + 25)
+        scoreRect.center = (self.WINDOWWIDTH /2, overRect.bottom + 20)
 
         DISPLAYSURF.blit(gameSurf, gameRect)
         DISPLAYSURF.blit(overSurf, overRect)
+        DISPLAYSURF.blit(scoreSurf, scoreRect)
+
         self.drawPressKeyMsg()
         pygame.display.update()
         pygame.time.wait(500)

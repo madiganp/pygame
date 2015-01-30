@@ -1,39 +1,67 @@
 from unittest import TestCase
+import unittest
 from Snake import Snake
+from db_connect import DBConnect
+import random, pygame, sys
+
 
 __author__ = 'madiganp'
 
 
 class TestSnake(TestCase):
-    def test_runGame(self):
-        self.fail()
+    global db, snake
 
-    def test_drawPressKeyMsg(self):
-        self.fail()
+    @classmethod
+    def setUp(cls):
+        pygame.init()
+        db = DBConnect('pygamescores')
+        snake = Snake(db)
 
-    def test_checkForKeyPress(self):
-        self.fail()
+    @classmethod
+    def tearDown(cls):
+        db.close_database
 
-    def test_showStartScreen(self):
-        self.fail()
 
-    def test_terminate(self):
-        self.fail()
+    # def test_showStartScreen(self):
+    #     self.fail()
+    #
+    # def test_runGame(self):
+    #     self.fail()
+    #
+    # def test_drawScore(self):
+    #     self.fail()
+    #
+    # def test_drawWorm(self):
+    #     self.fail()
+    #
+    # def test_drawApple(self):
+    #     self.fail()
+    #
+    # def test_drawGrid(self):
+    #     self.fail()
+    #
+    # def test_drawPressKeyMsg(self):
+    #     self.fail()
+    #
+    # def test_drawHighScores(self):
+    #     self.fail()
+    #
+    # def test_checkForKeyPress(self):
+    #     self.fail()
 
     def test_getRandomLocation(self):
-        self.fail()
+        random_loc = snake.getRandomLocation()
+        self.assertIsNotNone(random_loc)
 
-    def test_showGameOverScreen(self):
-        self.fail()
+    # def test_saveScore(self):
+    #     self.fail()
+    #
+    # def test_showGameOverScreen(self):
+    #     self.fail()
+    #
+    # def test_terminate(self):
+    #     self.fail()
 
-    def test_drawScore(self):
-        self.fail()
 
-    def test_drawWorm(self):
-        self.fail()
-
-    def test_drawApple(self):
-        self.fail()
-
-    def test_drawGrid(self):
-        self.fail()
+if __name__ == '__main__':
+    unittest.main()

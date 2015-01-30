@@ -81,8 +81,6 @@ class DBConnect:
 
             self.cursor.execute(query)
             rows = self.cursor.fetchall()
-            for row in rows:
-                print(row)
 
         return rows
 
