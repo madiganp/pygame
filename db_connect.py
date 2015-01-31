@@ -14,12 +14,11 @@ class DBConnect:
     )
 
     # Constructor
-    def __init__(self, dbname):
+    def __init__(self):
         self.cnx = mysql.connector.connect(user="root", password='jfkd', host='localhost')
         self.cnx.start_transaction(isolation_level='READ COMMITTED')
         self.cursor = self.cnx.cursor()
-        self.connect_to_db(dbname)
-        self.create_table()
+
 
 
     # Attempt to connect to the database specified by
@@ -28,11 +27,15 @@ class DBConnect:
     def connect_to_db(self, dbname):
         try:
             self.cnx.database = dbname
+            self.create_table()
+            return True
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database " + dbname + " did not exits. Creating database.")
-                self.create_database(self.cursor, dbname)
+                print("Database '" + dbname + "' did not exist. Creating database.")
+                self.create_database(dbname)
                 self.cnx.database = dbname
+                self.create_table()
+                return False
             else:
                 print(err)
                 exit(1)

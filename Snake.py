@@ -4,13 +4,14 @@ from db_connect import DBConnect
 
 def main():
     pygame.init()
-    db = DBConnect('pygamescores') # Connect to the database to save the high scores
+    db = DBConnect() # Connect to the database to save the high scores
+    db.connect_to_db('pygamescores')
     snake = Snake(db)
     db.close_database()
 
 
 class Snake:
-    FPS = 20
+    FPS = 12
     WINDOWWIDTH = 740
     WINDOWHEIGHT = 580
     CELLSIZE = 20
