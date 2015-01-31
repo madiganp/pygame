@@ -122,6 +122,12 @@ class Snake:
             if self.wormCoords[self.HEAD]['x'] == apple['x'] and self.wormCoords[self.HEAD]['y'] == apple['y']:
                 # don't remove worm's tail segment
                 apple = self.getRandomLocation() # set a new apple somewhere
+                # Increase the speed of the snake after every 2 apples
+                if len(self.wormCoords) == 3:
+                    self.FPS = 12
+                elif len(self.wormCoords) % 5 == 0:
+                    self.FPS = self.FPS + 2
+                    print self.FPS
             else:
                 del self.wormCoords[-1] # remove worm's tail segment
 

@@ -24,16 +24,16 @@ class DBConnect:
     # Attempt to connect to the database specified by
     # DB_NAME. If the database does not exist, create it.
     # Calls: create_database()
-    def connect_to_db(self, dbname):
+    def connect_to_db(self, db_name):
         try:
-            self.cnx.database = dbname
+            self.cnx.database = db_name
             self.create_table()
             return True
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database '" + dbname + "' did not exist. Creating database.")
-                self.create_database(dbname)
-                self.cnx.database = dbname
+                print("Database '" + db_name + "' did not exist. Creating database.")
+                self.create_database(db_name)
+                self.cnx.database = db_name
                 self.create_table()
                 return False
             else:
@@ -43,10 +43,10 @@ class DBConnect:
 
     # If the database specified in DB_NAME does not exist,
     # attempt to create a new instance of the database.
-    def create_database(self, dbname):
+    def create_database(self, db_name):
         try:
             self.cursor.execute(
-                "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(dbname)
+                "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(db_name)
             )
             self.cnx.commit()   # Make sure data is committed to the database
         except mysql.connector.Error as err:
