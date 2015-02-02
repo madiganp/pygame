@@ -78,6 +78,7 @@ class Snake:
             if self.checkForKeyPress():
                 return
             pygame.display.update()
+
             FPSCLOCK.tick(self.FPS)
             degrees1 += 3 # rotate by 3 degrees each frame
             degrees2 += 7 # rotate by 7 degrees each frame
@@ -94,7 +95,7 @@ class Snake:
 
         # Start the apple in a random place.
         apple = self.getRandomLocation()
-
+        pause = False
         while True: # main game loop
             for event in pygame.event.get(): # event handling loop
                 if event.type == QUIT:
@@ -108,46 +109,47 @@ class Snake:
                         direction = self.UP
                     elif (event.key == K_DOWN or event.key == K_s) and direction != self.UP:
                         direction = self.DOWN
+                    elif (event.key == K_p):
+                        pause = not pause
                     elif event.key == K_ESCAPE:
                         self.terminate()
-
-            # check if the worm has hit itself or the edge
-            if self.wormCoords[self.HEAD]['x'] == -1 or self.wormCoords[self.HEAD]['x'] == self.CELLWIDTH or self.wormCoords[self.HEAD]['y'] == -1 or self.wormCoords[self.HEAD]['y'] == self.CELLHEIGHT:
-                return # game over
-            for wormBody in self.wormCoords[1:]:
-                if wormBody['x'] == self.wormCoords[self.HEAD]['x'] and wormBody['y'] == self.wormCoords[self.HEAD]['y']:
+            if pause is not True:
+                # check if the worm has hit itself or the edge
+                if self.wormCoords[self.HEAD]['x'] == -1 or self.wormCoords[self.HEAD]['x'] == self.CELLWIDTH or self.wormCoords[self.HEAD]['y'] == -1 or self.wormCoords[self.HEAD]['y'] == self.CELLHEIGHT:
                     return # game over
+                for wormBody in self.wormCoords[1:]:
+                    if wormBody['x'] == self.wormCoords[self.HEAD]['x'] and wormBody['y'] == self.wormCoords[self.HEAD]['y']:
+                        return # game over
 
-            # check if worm has eaten an apple
-            if self.wormCoords[self.HEAD]['x'] == apple['x'] and self.wormCoords[self.HEAD]['y'] == apple['y']:
-                # don't remove worm's tail segment
-                apple = self.getRandomLocation() # set a new apple somewhere
-                # Increase the speed of the snake after every 2 apples
-                if len(self.wormCoords) == 3:
-                    self.FPS = 12
-                elif len(self.wormCoords) % 5 == 0:
-                    self.FPS = self.FPS + 2
-                    print self.FPS
-            else:
-                del self.wormCoords[-1] # remove worm's tail segment
+                # check if worm has eaten an apple
+                if self.wormCoords[self.HEAD]['x'] == apple['x'] and self.wormCoords[self.HEAD]['y'] == apple['y']:
+                    # don't remove worm's tail segment
+                    apple = self.getRandomLocation() # set a new apple somewhere
+                    # Increase the speed of the snake after every 2 apples
+                    if len(self.wormCoords) == 3:
+                        self.FPS = 12
+                    elif len(self.wormCoords) % 5 == 0:
+                        self.FPS = self.FPS + 2
+                else:
+                    del self.wormCoords[-1] # remove worm's tail segment
 
-            # move the worm by adding a segment in the direction it is moving
-            if direction == self.UP:
-                newHead = {'x': self.wormCoords[self.HEAD]['x'], 'y': self.wormCoords[self.HEAD]['y'] - 1}
-            elif direction == self.DOWN:
-                newHead = {'x': self.wormCoords[self.HEAD]['x'], 'y': self.wormCoords[self.HEAD]['y'] + 1}
-            elif direction == self.LEFT:
-                newHead = {'x': self.wormCoords[self.HEAD]['x'] - 1, 'y': self.wormCoords[self.HEAD]['y']}
-            elif direction == self.RIGHT:
-                newHead = {'x': self.wormCoords[self.HEAD]['x'] + 1, 'y': self.wormCoords[self.HEAD]['y']}
-            self.wormCoords.insert(0, newHead)
-            DISPLAYSURF.fill(self.BGCOLOR)
-            self.drawGrid()
-            self.drawWorm(self.wormCoords)
-            self.drawApple(apple)
-            self.drawScore(len(self.wormCoords) - 3)
-            pygame.display.update()
-            FPSCLOCK.tick(self.FPS)
+                # move the worm by adding a segment in the direction it is moving
+                if direction == self.UP:
+                    newHead = {'x': self.wormCoords[self.HEAD]['x'], 'y': self.wormCoords[self.HEAD]['y'] - 1}
+                elif direction == self.DOWN:
+                    newHead = {'x': self.wormCoords[self.HEAD]['x'], 'y': self.wormCoords[self.HEAD]['y'] + 1}
+                elif direction == self.LEFT:
+                    newHead = {'x': self.wormCoords[self.HEAD]['x'] - 1, 'y': self.wormCoords[self.HEAD]['y']}
+                elif direction == self.RIGHT:
+                    newHead = {'x': self.wormCoords[self.HEAD]['x'] + 1, 'y': self.wormCoords[self.HEAD]['y']}
+                self.wormCoords.insert(0, newHead)
+                DISPLAYSURF.fill(self.BGCOLOR)
+                self.drawGrid()
+                self.drawWorm(self.wormCoords)
+                self.drawApple(apple)
+                self.drawScore(len(self.wormCoords) - 3)
+                pygame.display.update()
+                FPSCLOCK.tick(self.FPS)
 
 
     def drawScore(self, score):
