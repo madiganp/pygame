@@ -8,7 +8,7 @@ branches:
     - master
 
 before_script:
-  - mysql -e 'create database <<pygamescores>>;'
+  - mysql -e 'create database pygamescores;'
 
 # Command to install dependencies
 install:
