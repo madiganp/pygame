@@ -17,4 +17,4 @@ install:
 
 # Command to run tests
 script:
-  - python /test_DBConnect.py
+  - python test_DBConnect.py
