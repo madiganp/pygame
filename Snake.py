@@ -12,8 +12,8 @@ def main():
 
 class Snake:
     FPS = 12
-    WINDOWWIDTH = 740
-    WINDOWHEIGHT = 580
+    WINDOWWIDTH = 840
+    WINDOWHEIGHT = 680
     CELLSIZE = 20
     assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
     assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
@@ -109,7 +109,7 @@ class Snake:
                         direction = self.UP
                     elif (event.key == K_DOWN or event.key == K_s) and direction != self.UP:
                         direction = self.DOWN
-                    elif (event.key == K_p):
+                    elif (event.key == K_p): # pause button ('p') was pressed
                         pause = not pause
                     elif event.key == K_ESCAPE:
                         self.terminate()
@@ -129,7 +129,7 @@ class Snake:
                     if len(self.wormCoords) == 3:
                         self.FPS = 12
                     elif len(self.wormCoords) % 5 == 0:
-                        self.FPS = self.FPS + 2
+                        self.FPS = self.FPS + 1
                 else:
                     del self.wormCoords[-1] # remove worm's tail segment
 
@@ -163,6 +163,7 @@ class Snake:
         for coord in wormCoords:
             x = coord['x'] * self.CELLSIZE
             y = coord['y'] * self.CELLSIZE
+
             wormSegmentRect = pygame.Rect(x, y, self.CELLSIZE, self.CELLSIZE)
             pygame.draw.rect(DISPLAYSURF, self.DARKGREEN, wormSegmentRect)
             wormInnerSegmentRect = pygame.Rect(x + 4, y + 4, self.CELLSIZE - 8, self.CELLSIZE - 8)
