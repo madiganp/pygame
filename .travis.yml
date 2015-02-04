@@ -14,7 +14,7 @@ before_script:
 # Command to install dependencies
 install:
   - "pip install -r dependencies.txt"
-  - sudo apt-get install python-pygame
+#  - sudo apt-get install python-pygame
 
 # Command to run tests
 script:
