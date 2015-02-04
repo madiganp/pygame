@@ -17,4 +17,5 @@ install:
 
 # Command to run tests
 script:
+  - python Snake.py
   - python test_DBConnect.py
