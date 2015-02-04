@@ -9,6 +9,7 @@ branches:
 
 before_script:
   - mysql -e 'create database pygamescores;'
+  - pwd
 
 # Command to install dependencies
 install:
