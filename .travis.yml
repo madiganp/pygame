@@ -11,7 +11,8 @@ before_script:
   - mysql -e 'create database <<pygamescores>>;'
 
 # Command to install dependencies
-install: "pip install -r dependencies.txt"
+install:
+  - "pip install -r dependencies.txt"
 
 # Command to run tests
 script:
