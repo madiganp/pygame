@@ -8,8 +8,8 @@ branches:
     - master
 
 before_script:
-  - mysql -e 'create database pygamescores;'
   - pwd
+  - mysql -e 'create database pygamescores;'
 
 # Command to install dependencies
 install:
@@ -17,4 +17,4 @@ install:
 
 # Command to run tests
 script:
-  - python snake_game/test_DBConnect.py
+  - python /test_DBConnect.py
