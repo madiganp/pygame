@@ -3,23 +3,27 @@ language: python
 python:
   - "2.7"
 
+virtualenv:
+  system_site_packages: true
+
 branches:
   only:
     - master
 
 before_script:
-  - pwd
-  - python --version
-  - python2 --version
+  - echo "Entered before_script..."
+  - echo "directory -> "; pwd
   - mysql -e 'create database IF NOT EXISTS pygamescores;'
 
 # Command to install dependencies
 install:
+  - echo "Entered install..."
   - sudo apt-get update -qq
   - sudo apt-get install -y python-pygame
   - "pip install -r dependencies.txt"
 
 # Command to run tests
 script:
+  - echo "Entered script..."
   - python Snake.py
   - python test_DBConnect.py
