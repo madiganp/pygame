@@ -9,12 +9,13 @@ branches:
 
 before_script:
   - pwd
-  - mysql -e 'create database pygamescores;'
+  - mysql -e 'create database IF NOT EXISTS pygamescores;'
 
 # Command to install dependencies
 install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y python-pygame
   - "pip install -r dependencies.txt"
-#  - sudo apt-get install python-pygame
 
 # Command to run tests
 script:
