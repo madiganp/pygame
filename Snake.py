@@ -3,9 +3,7 @@ from pygame.locals import *
 from db_connect import DBConnect
 
 def main():
-    test = raw_input("Test?")
-    print test
-    #pygame.init()
+    pygame.init()
     db = DBConnect() # Connect to the database to save the high scores
     db.connect_to_db('pygamescores')
     #snake = Snake(db)
