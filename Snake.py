@@ -11,7 +11,7 @@ def main():
 
 
 class Snake:
-    FPS = 12
+    FPS = 15
     WINDOWWIDTH = 840
     WINDOWHEIGHT = 680
     CELLSIZE = 20
@@ -86,8 +86,10 @@ class Snake:
 
     def runGame(self):
         # Set a random start point.
-        startx = random.randint(5, self.CELLWIDTH - 6)
-        starty = random.randint(5, self.CELLHEIGHT - 6)
+        #startx = random.randint(5, self.CELLWIDTH - 6)
+        #starty = random.randint(5, self.CELLHEIGHT - 6)
+        startx = self.CELLWIDTH / 2
+        starty = self.CELLHEIGHT/ 2
         self.wormCoords = [{'x': startx,     'y': starty},
                       {'x': startx - 1, 'y': starty},
                       {'x': startx - 2, 'y': starty}]
@@ -127,7 +129,7 @@ class Snake:
                     apple = self.getRandomLocation() # set a new apple somewhere
                     # Increase the speed of the snake after every 2 apples
                     if len(self.wormCoords) == 3:
-                        self.FPS = 12
+                        self.FPS = 15
                     elif len(self.wormCoords) % 5 == 0:
                         self.FPS = self.FPS + 1
                 else:
@@ -235,7 +237,7 @@ class Snake:
 
 
     def getRandomLocation(self):
-        return {'x': random.randint(0, self.CELLWIDTH - 1), 'y': random.randint(0, self.CELLHEIGHT - 1)}
+        return {'x': random.randint(1, self.CELLWIDTH - 2), 'y': random.randint(1, self.CELLHEIGHT - 2)}
 
 
     # Save the score in the database
