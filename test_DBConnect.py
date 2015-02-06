@@ -14,8 +14,8 @@ class TestDBConnect(TestCase):
 
         db.close_database()
 
-    # def test_create_database(self):
-    #     self.fail()
+    def test_create_database(self):
+        self.fail()
     #
     # def test_create_table(self):
     #     self.fail()
