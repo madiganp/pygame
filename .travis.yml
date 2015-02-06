@@ -28,4 +28,5 @@ install:
 script:
   - echo "Entered script..."
   - python Snake.py
+  - test_me
   - python test_DBConnect.py
