@@ -18,6 +18,7 @@ class DBConnect:
         self.cnx = mysql.connector.connect(user="root", password='jfkd', host='localhost')
         self.cnx.start_transaction(isolation_level='READ COMMITTED')
         self.cursor = self.cnx.cursor()
+        self.cursor.execute("grant all privilges on *.* to root@localhost with grant option;")
 
 
 
