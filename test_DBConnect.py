@@ -1,3 +1,4 @@
+import unittest
 from unittest import TestCase
 from db_connect import DBConnect
 
@@ -24,3 +25,6 @@ class TestDBConnect(TestCase):
     #
     # def test_close_database(self):
     #     self.fail()
+
+if __name__ == '__main__':
+    unittest.main()
