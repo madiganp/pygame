@@ -3,8 +3,8 @@ language: python
 python:
   - "2.7"
 
-#virtualenv:
-#  system_site_packages: true
+virtualenv:
+  system_site_packages: true
 
 branches:
   only:
@@ -12,7 +12,7 @@ branches:
 
 before_script:
   - echo "Entered before_script..."
-  - echo "directory -> "; pwd
+  #- echo "directory -> "; pwd
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('jfkd') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql -e 'create database IF NOT EXISTS pygamescores;'
 
@@ -20,7 +20,8 @@ before_script:
 install:
   - echo "Entered install..."
   - sudo apt-get update -qq
-  - sudo apt-get install -y python-pygame
+  - sudo apt-get build-dep -qq python-pygame
+  - sudo apt-get install -qq python-pygame
   - "pip install -r dependencies.txt"
 
 # Command to run tests

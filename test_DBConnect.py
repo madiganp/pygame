@@ -8,10 +8,8 @@ class TestDBConnect(TestCase):
 
     def test_connect_to_db(self):
         db = DBConnect()
-
         #self.assertFalse(db.connect_to_db('should_return_false'))
         self.assertTrue(db.connect_to_db('pygamescores'))
-
         db.close_database()
 
     # def test_create_database(self):

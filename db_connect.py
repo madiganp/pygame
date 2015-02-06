@@ -20,7 +20,6 @@ class DBConnect:
         self.cursor = self.cnx.cursor()
 
 
-
     # Attempt to connect to the database specified by
     # DB_NAME. If the database does not exist, create it.
     # Calls: create_database()
