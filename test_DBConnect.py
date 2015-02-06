@@ -3,7 +3,6 @@ from db_connect import DBConnect
 
 __author__ = 'madiganp'
 
-
 class TestDBConnect(TestCase):
 
     def test_connect_to_db(self):
@@ -14,8 +13,8 @@ class TestDBConnect(TestCase):
 
         db.close_database()
 
-    def test_create_database(self):
-        self.fail()
+    # def test_create_database(self):
+    #     self.fail()
     #
     # def test_create_table(self):
     #     self.fail()
