@@ -14,7 +14,6 @@ before_script:
   - echo "Entered before_script..."
   - echo "directory -> "; pwd
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('jfkd') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
-  #- mysql grant all privilges on *.* to 'root'@'localhost' with grant option
   - mysql -e 'create database IF NOT EXISTS pygamescores;'
 
 # Command to install dependencies
