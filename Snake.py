@@ -111,7 +111,7 @@ class Snake:
                         direction = self.UP
                     elif (event.key == K_DOWN or event.key == K_s) and direction != self.UP:
                         direction = self.DOWN
-                    elif (event.key == K_p): # pause button ('p') was pressed
+                    elif (event.key == K_p or event.key == K_SPACE): # pause button ('p') was pressed
                         pause = not pause
                     elif event.key == K_ESCAPE:
                         self.terminate()
