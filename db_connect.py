@@ -89,7 +89,6 @@ class DBConnect:
 
     # Close the database.
     def close_database(self):
-        print("Closing the connection...")
         if self.cnx is not None:
             self.cnx.close()
         else:

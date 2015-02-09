@@ -1,14 +1,43 @@
-import random, pygame, sys
+import random, pygame, sys, getopt
 from pygame.locals import *
 from db_connect import DBConnect
 
-def main():
-    pygame.init()
+def main(argv):
+    isTest = False
+    isVerbose = False
+    try:
+        opts, args = getopt.getopt(argv, "htv")
+    except getopt.GetoptError:
+        printHelp()
+
+    for opt, arg in opts:
+        if opt == '-h':
+            printHelp()
+        elif opt == '-t':
+            print "Running testing version."
+            isTest = True
+        elif opt == '-v':
+            isVerbose = True
+            print "Running with verbose on."
+        else:
+            printHelp()
     db = DBConnect() # Connect to the database to save the high scores
     db.connect_to_db('pygamescores')
-    snake = Snake(db)
+    if isTest:
+
+        sys.exit(0)
+    else:
+        pygame.init()
+        snake = Snake(db, isVerbose)
+
     db.close_database()
 
+def printHelp():
+    print "python Snake.py" \
+          "\n\t-t: Run testing version of Snake.py" \
+          "\n\t-h: Display help" \
+          "\n\t-v: Run in verbose mode"
+    sys.exit(2)
 
 class Snake:
     FPS = 15
@@ -36,7 +65,7 @@ class Snake:
     RIGHT = 'right'
     HEAD = 0 # Index of the worm's head
 
-    def __init__(self, db):
+    def __init__(self, db, isVerbose):
         global FPSCLOCK, DISPLAYSURF, BASICFONT
         FPSCLOCK = pygame.time.Clock()
         DISPLAYSURF = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHEIGHT))
@@ -45,11 +74,13 @@ class Snake:
 
         self.showStartScreen()
         while True:
-            self.runGame()
+            self.runGame(isVerbose)
             self.showGameOverScreen(len(self.wormCoords) - 3)
-            topScores = self.saveScore(db, len(self.wormCoords) - 3)
+            topScores = self.saveScore(db, len(self.wormCoords) - 3, isVerbose)
             if topScores is not None:
                 self.drawHighScores(topScores)
+                if isVerbose:
+                    print "Top Scores: ", topScores
 
 
     def showStartScreen(self):
@@ -84,7 +115,7 @@ class Snake:
             degrees2 += 7 # rotate by 7 degrees each frame
 
 
-    def runGame(self):
+    def runGame(self, isVerbose):
         # Set a random start point.
         #startx = random.randint(5, self.CELLWIDTH - 6)
         #starty = random.randint(5, self.CELLHEIGHT - 6)
@@ -112,10 +143,14 @@ class Snake:
                     elif (event.key == K_DOWN or event.key == K_s) and direction != self.UP:
                         direction = self.DOWN
                     elif (event.key == K_p or event.key == K_SPACE): # pause button ('p') was pressed
+                        if isVerbose:
+                            print "Pause button (p or space bar) was pressed."
                         pause = not pause
                     elif event.key == K_ESCAPE:
+                        if isVerbose:
+                            print "Escape key was pressed."
                         self.terminate()
-            if pause is not True:
+            if not pause:
                 # check if the worm has hit itself or the edge
                 if self.wormCoords[self.HEAD]['x'] == -1 or self.wormCoords[self.HEAD]['x'] == self.CELLWIDTH or self.wormCoords[self.HEAD]['y'] == -1 or self.wormCoords[self.HEAD]['y'] == self.CELLHEIGHT:
                     return # game over
@@ -241,11 +276,11 @@ class Snake:
 
 
     # Save the score in the database
-    def saveScore(self, db, score):
+    def saveScore(self, db, score, isVerbose):
         topScores = None
         if db is not None:
-            topScores = db.save_score("Peter", score)
-        else:
+            topScores = db.save_score("Pete", score)
+        elif isVerbose:
             print "Error saving score (database is null)."
         return topScores
 
@@ -286,4 +321,4 @@ class Snake:
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])

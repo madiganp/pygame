@@ -29,3 +29,7 @@ script:
   - echo "Entered script..."
   - python Snake.py -t
   - python test_DBConnect.py
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --access-token=<<access token>> --format=php-clover tests/_output/coverage.xml
