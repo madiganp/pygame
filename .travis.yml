@@ -12,24 +12,27 @@ branches:
 
 before_script:
   - echo "Entered before_script..."
-  #- echo "directory -> "; pwd
+
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('jfkd') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql -e 'create database IF NOT EXISTS pygamescores;'
 
 # Command to install dependencies
 install:
   - echo "Entered install..."
+
   - sudo apt-get update -qq
   - sudo apt-get build-dep -qq python-pygame
   - sudo apt-get install -qq python-pygame
-  - "pip install -r dependencies.txt"
+
+  - pip install -r dependencies.txt
   #- pip install scrutinizer-ocular
 
 # Command to run tests
 script:
   - echo "Entered script..."
   - python Snake.py -t
-  - python test_DBConnect.py
+  #- python test_DBConnect.py
+  - coverage run --source=snake_game test_DBConnect.py
 
-after_script:
-  #- ocular --access-token "54c292d4ec917fa2c793d7bff533c7199334083ea4d0c8c7c094d3efe66e3376"
+ after-sucess:
+  - coveralls

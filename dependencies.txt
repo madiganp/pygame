@@ -1,1 +1,2 @@
 http://cdn.mysql.com/Downloads/Connector-Python/mysql-connector-python-2.0.3.zip#md5=9fda73a7f69e769e6a545c98b6739514
+coveralls
