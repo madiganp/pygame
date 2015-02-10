@@ -34,5 +34,5 @@ script:
   #- python test_DBConnect.py
   - coverage run --source=snake_game test_DBConnect.py
 
- after-sucess:
+after-sucess:
   - coveralls
