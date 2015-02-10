@@ -25,16 +25,16 @@ install:
   - sudo apt-get install -qq python-pygame
 
   - pip install -r dependencies.txt
-
-  - pip install scrutinizer-ocular
-  - ocular --data-file ".coverage" --config-file ".coveragerc"
+  - pip install coveralls
+  #- pip install scrutinizer-ocular
+  #- ocular --data-file ".coverage" --config-file ".coveragerc"
 
 # Command to run tests
 script:
   - echo "Entered script..."
   - python Snake.py -t
-  - python test_DBConnect.py
-  #- coverage run test_DBConnect.py
+  #- python test_DBConnect.py
+  - coverage run test_DBConnect.py
 
 after-sucess:
-  #- coveralls
+  - coveralls
