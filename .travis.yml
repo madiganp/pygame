@@ -32,7 +32,7 @@ script:
   - echo "Entered script..."
   - python Snake.py -t
   #- python test_DBConnect.py
-  - coverage run --source=pygame test_DBConnect.py
+  - coverage run test_DBConnect.py
 
 after-sucess:
   - coveralls
