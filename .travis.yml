@@ -23,6 +23,7 @@ install:
   - sudo apt-get build-dep -qq python-pygame
   - sudo apt-get install -qq python-pygame
   - "pip install -r dependencies.txt"
+  #- pip install scrutinizer-ocular
 
 # Command to run tests
 script:
@@ -31,5 +32,4 @@ script:
   - python test_DBConnect.py
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --access-token=<<access token>> --format=php-clover tests/_output/coverage.xml
+  #- ocular --access-token "54c292d4ec917fa2c793d7bff533c7199334083ea4d0c8c7c094d3efe66e3376"
