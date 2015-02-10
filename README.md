@@ -8,4 +8,4 @@ SE3800-002
 
 
 
-[![Coverage Status](https://coveralls.io/repos/madiganp/pygame/badge.svg)](https://coveralls.io/r/madiganp/pygame)
+[![Coverage Status](https://coveralls.io/repos/madiganp/pygame/badge.png)](https://coveralls.io/r/madiganp/pygame)
