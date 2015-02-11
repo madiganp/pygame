@@ -36,5 +36,5 @@ script:
   #- python test_DBConnect.py
   - coverage run test_DBConnect.py
 
-after_sucess:
+after_success:
   - coveralls
