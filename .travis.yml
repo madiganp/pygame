@@ -25,7 +25,7 @@ install:
   - sudo apt-get install -qq python-pygame
 
   - pip install -r dependencies.txt
-  - pip install coveralls
+  - pip install python-coveralls
   #- pip install scrutinizer-ocular
   #- ocular --data-file ".coverage" --config-file ".coveragerc"
 
@@ -36,5 +36,5 @@ script:
   #- python test_DBConnect.py
   - coverage run test_DBConnect.py
 
-after-sucess:
+after_sucess:
   - coveralls
