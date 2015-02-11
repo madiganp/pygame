@@ -25,7 +25,7 @@ install:
   - sudo apt-get install -qq python-pygame
 
   - pip install -r dependencies.txt
-  - pip install python-coveralls
+  - pip install coveralls
   #- pip install scrutinizer-ocular
   #- ocular --data-file ".coverage" --config-file ".coveragerc"
 
