@@ -24,7 +24,6 @@ def main(argv):
     db = DBConnect() # Connect to the database to save the high scores
     db.connect_to_db('pygamescores')
     if isTest:
-
         sys.exit(0)
     else:
         pygame.init()

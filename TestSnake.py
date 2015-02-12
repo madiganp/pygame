@@ -1,15 +1,23 @@
-import unittest
+import unittest, Snake
 from unittest import TestCase
 from db_connect import DBConnect
 
 __author__ = 'madiganp'
 
-class TestDBConnect(TestCase):
+class TestSnake(TestCase):
 
+    # Test the connection to the database and assert that
+    # the database 'pygamescores' exists.
     def test_connect_to_db(self):
         db = DBConnect()
-        #self.assertFalse(db.connect_to_db('should_return_false'))
         self.assertTrue(db.connect_to_db('pygamescores'))
+        db.close_database()
+
+    # Assert that the high scores persist in the snake game.
+    def test_persistence(self):
+        db = DBConnect()
+        db.connect_to_db('pygamescores')
+        snake = Snake(db, True)
         db.close_database()
 
     # def test_create_database(self):
