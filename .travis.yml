@@ -34,7 +34,7 @@ script:
   - echo "Entered script..."
   - python Snake.py -t
   #- python TestSnake.py
-  - coverage run --source=/ TestSnake.py
+  - coverage run --source=pygame/ TestSnake.py
 
 after_success:
   - coveralls
