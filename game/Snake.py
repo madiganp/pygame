@@ -32,7 +32,6 @@ def main(argv):
     if isTest:
         sys.exit(0)
     else:
-        pygame.init()
         snake = Snake(db, isVerbose)
 
     db.close_database()
@@ -71,6 +70,7 @@ class Snake:
     HEAD = 0 # Index of the worm's head
 
     def __init__(self, db, isVerbose):
+        pygame.init()
         global FPSCLOCK, DISPLAYSURF, BASICFONT
         FPSCLOCK = pygame.time.Clock()
         DISPLAYSURF = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHEIGHT))

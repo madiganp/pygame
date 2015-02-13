@@ -20,6 +20,7 @@ class TestSnake(TestCase):
     def test_persistence(self):
         db = DBConnect()
         db.connect_to_db('pygamescores')
+
         snake = Snake(db, True)
         db.close_database()
 
