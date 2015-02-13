@@ -30,21 +30,12 @@ class TestSnake(TestCase):
         highscores2 = db2.getScores()
         self.assertTrue(highscores2[0][1] == 100)
 
+    # Test snake terminate
     def test_terminate_snake(self):
         with self.assertRaises(SystemExit):
             snake = Snake(None, True, True)
             snake.terminate()
-    # def test_create_database(self):
-    #     self.fail()
-    #
-    # def test_create_table(self):
-    #     self.fail()
-    #
-    # def test_save_score(self):
-    #     self.fail()
-    #
-    # def test_close_database(self):
-    #     self.fail()
+
 
 if __name__ == '__main__':
     unittest.main()
