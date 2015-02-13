@@ -21,7 +21,7 @@ class TestSnake(TestCase):
         db = DBConnect()
         db.connect_to_db('pygamescores')
 
-        snake = Snake(db, True)
+        snake = Snake(db, True, False)
         db.close_database()
 
     # def test_create_database(self):
