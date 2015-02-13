@@ -32,9 +32,9 @@ install:
 # Command to run tests
 script:
   - echo "Entered script..."
-  - python Snake.py -t
+  - python game/Snake.py -t
   #- python TestSnake.py
-  - coverage run --source=pygame/ TestSnake.py
+  - coverage run --source=game/ game/TestSnake.py
 
 after_success:
   - coveralls

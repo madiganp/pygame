@@ -1,6 +1,12 @@
-import random, pygame, sys, getopt
+import random
+import sys
+import getopt
+
+import pygame
 from pygame.locals import *
-from db_connect import DBConnect
+
+from snake_game.game.db_connect import DBConnect
+
 
 def main(argv):
     isTest = False
