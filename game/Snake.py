@@ -30,11 +30,12 @@ def main(argv):
     db = DBConnect() # Connect to the database to save the high scores
     db.connect_to_db('pygamescores')
     if isTest:
-        sys.exit(0)
+        snake = Snake(db, isVerbose, True)
     else:
-        snake = Snake(db, isVerbose)
+        snake = Snake(db, isVerbose, False)
 
     db.close_database()
+
 
 def printHelp():
     print "python Snake.py" \
@@ -42,6 +43,7 @@ def printHelp():
           "\n\t-h: Display help" \
           "\n\t-v: Run in verbose mode"
     sys.exit(2)
+
 
 class Snake:
     FPS = 15
@@ -69,23 +71,23 @@ class Snake:
     RIGHT = 'right'
     HEAD = 0 # Index of the worm's head
 
-    def __init__(self, db, isVerbose):
+    def __init__(self, db, isVerbose, test=False):
         pygame.init()
         global FPSCLOCK, DISPLAYSURF, BASICFONT
         FPSCLOCK = pygame.time.Clock()
         DISPLAYSURF = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHEIGHT))
         BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
         pygame.display.set_caption('Snake')
-
-        self.showStartScreen()
-        while True:
-            self.runGame(isVerbose)
-            self.showGameOverScreen(len(self.wormCoords) - 3)
-            topScores = self.saveScore(db, len(self.wormCoords) - 3, isVerbose)
-            if topScores is not None:
-                self.drawHighScores(topScores)
-                if isVerbose:
-                    print "Top Scores: ", topScores
+        if test is False:
+            self.showStartScreen()
+            while True:
+                self.runGame(isVerbose)
+                self.showGameOverScreen(len(self.wormCoords) - 3)
+                topScores = self.saveScore(db, len(self.wormCoords) - 3, isVerbose)
+                if topScores is not None:
+                    self.drawHighScores(topScores)
+                    if isVerbose:
+                        print "Top Scores: ", topScores
 
 
     def showStartScreen(self):
