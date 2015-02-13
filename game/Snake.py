@@ -323,7 +323,7 @@ class Snake:
 
     def terminate(self):
         pygame.quit()
-        sys.exit()
+        sys.exit(0)
 
 
 

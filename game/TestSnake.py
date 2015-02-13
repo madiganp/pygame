@@ -18,12 +18,22 @@ class TestSnake(TestCase):
 
     # Assert that the high scores persist in the snake game.
     def test_persistence(self):
-        db = DBConnect()
-        db.connect_to_db('pygamescores')
+        db1 = DBConnect()
+        db1.connect_to_db('pygamescores')
+        snake = Snake(db1, True, True)
+        snake.saveScore(db1, 100, False)
+        db1.close_database()
+        #snake.terminate()
 
-        snake = Snake(db, True, True)
-        db.close_database()
+        db2 = DBConnect()
+        db2.connect_to_db('pygamescores')
+        highscores2 = db2.getScores()
+        self.assertTrue(highscores2[0][1] == 100)
 
+    def test_terminate_snake(self):
+        with self.assertRaises(SystemExit):
+            snake = Snake(None, True, True)
+            snake.terminate()
     # def test_create_database(self):
     #     self.fail()
     #

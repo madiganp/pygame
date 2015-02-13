@@ -69,9 +69,7 @@ class DBConnect:
     # If the user's score is within the top 10, save the name and score to the database.
     def save_score(self, username, new_score):
         # Check to see if the score is in the top ten:
-        query = ("SELECT * FROM pygamescores.highscores ORDER BY score DESC LIMIT 10")
-        self.cursor.execute(query)
-        rows = self.cursor.fetchall()
+        rows = self.getScores()
 
         # If there are less than 10 accounts saved, automatically add it; otherwise must be greater than the 10th score.
         if (self.cursor.rowcount <= 9) or (new_score > rows[9][1]):
@@ -80,12 +78,17 @@ class DBConnect:
             data = (username, new_score)
             self.cursor.execute(new_high, data)
             self.cnx.commit()   # Make sure data is committed to the database
-
+            query = ("SELECT * FROM pygamescores.highscores ORDER BY score DESC LIMIT 10")
             self.cursor.execute(query)
             rows = self.cursor.fetchall()
-
         return rows
 
+    # Returns the top 10 scores.
+    def getScores(self):
+        query = ("SELECT * FROM pygamescores.highscores ORDER BY score DESC LIMIT 10")
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return rows
 
     # Close the database.
     def close_database(self):
