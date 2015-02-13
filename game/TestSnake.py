@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from snake_game.game import Snake
+import Snake
 from db_connect import DBConnect
 
 

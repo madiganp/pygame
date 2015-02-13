@@ -5,7 +5,7 @@ import getopt
 import pygame
 from pygame.locals import *
 
-from snake_game.game.db_connect import DBConnect
+from db_connect import DBConnect
 
 
 def main(argv):
